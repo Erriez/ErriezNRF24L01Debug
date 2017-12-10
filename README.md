@@ -1,4 +1,4 @@
-#Arduino nRF24L01 debug library.
+# Arduino nRF24L01 debug library.
 
 This library is an addition to the RF24 library to read and print nRF24L01 
 registers debug purposes. This library is compatbile with the Nordic nRF24L01 
@@ -61,7 +61,7 @@ void setup()
 }
 ```
 
-### Output
+### Serial output
 ```
 nRF24L01 registers:
     0x00: 0x0E (CONFIG)
