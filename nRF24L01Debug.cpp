@@ -5,7 +5,6 @@
 #include "SPI.h"
 
 #include <nRF24L01Debug.h>
-#include <printf.h>
 
 // Comment the macro below to disable bitfield prints
 #define USE_BITFIELDS
@@ -51,9 +50,7 @@ static const nRF24L01Registers regs[NUM_REGISTERS] = {
 // -----------------------------------------------------------------------------
 nRF24L01Debug::nRF24L01Debug(uint16_t csnPin)
 {
-	_csnPin = csnPin;
-    
-  printf_begin();
+  _csnPin = csnPin;
 }
 
 void nRF24L01Debug::printRegister(uint8_t addr, bool printBitfields)

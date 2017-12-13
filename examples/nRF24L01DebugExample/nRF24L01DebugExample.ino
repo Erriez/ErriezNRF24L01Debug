@@ -6,6 +6,7 @@
 // 
 
 #include <RF24.h>
+#include <printf.h>
 #include <nRF24L01Debug.h>
 
 // Pin defines
@@ -27,6 +28,9 @@ void setup()
   // Initialize serial port
   Serial.begin(115200);
   Serial.println(F("nRF24L01 diagnostics example"));
+
+  // Initialize printf
+  printf_begin();
 
   // Start RF24 radio
   radio.begin();
