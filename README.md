@@ -6,23 +6,24 @@ and nRF24L01+ SPI transceivers.
 
 ## Usage
 1. Add #include <nRF24L01Debug.h> to your application.
-2. Initialize the nRF24L01 debug library with the CSN pin.
-3. Print all registers with/without register bitfields in your application:
+2. Add #include <printf.h> and printf_begin() to setup().
+3. Initialize the nRF24L01 debug library with the CSN pin.
+4. Print all registers with/without register bitfields in your application:
 ```
   printAllRegisters(bool printBitfields);
 ```
 
-4. Print a single register:
+5. Print a single register:
 ```
   printRegister(uint8_t registerAddress, bool printBitfields);
 ```
 
-5. Read a register:
+6. Read a register:
 ```
   uint8_t readRegister(uint8_t reg);
 ```
 
-6. Read an address register:
+7. Read an address register:
 ```
   uint8_t readRegister(uint8_t reg, uint8_t* buf, uint8_t len);
 ```
@@ -35,11 +36,14 @@ this macro in ```nRF24L01Debug.cpp``` to save flash and RAM.
 // 1. Add include files:
 #include <RF24.h>
 #include <nRF24L01Debug.h> 
+
+// 2. Add printf initialization
+#include <printf.h>
   
 // Initialize RF24 radio library
 RF24 radio(CE_PIN, CSN_PIN);
   
-// 2. Initialize nRF24L01 debug library:
+// 3. Initialize nRF24L01 debug library:
 nRF24L01Debug nRF24Debug(CSN_PIN);
   
 void setup() 
@@ -47,16 +51,19 @@ void setup()
   // Initialize serial port
   Serial.begin(115200);
   
+  // 2. Call printf initialization
+  printf_begin();
+  
   // Start RF24 radio
   radio.begin();
   
   // Initialize the radio
   // ...
   
-  // 3. Print all nRF24L01 registers with bitfields after RF24 configuration
+  // 4. Print all nRF24L01 registers with bitfields after RF24 configuration
   nRF24Debug.printAllRegisters(true);
   
-  // 4. Print one single register without bitfields
+  // 5. Print one single register without bitfields
   nRF24Debug.printRegister(NRF_STATUS, false);
 }
 ```
@@ -115,7 +122,7 @@ nRF24L01 registers:
         ERX_P1[1]      = 1
         ERX_P0[0]      = 1
     0x03: 0x03 (SETUP_AW)
-        AW[1:0]        = 35 bytes
+        AW[1:0]        = 3 (5 bytes)
     0x04: 0x5F (SETUP_RETR)
         ARD[7:4]       = 5 (1500 us)
         ARC[3:0]       = 15 (retries)
@@ -126,7 +133,7 @@ nRF24L01 registers:
         RF_DR_LOW[5]   = 0
         PLL_LOCK[4]    = 0
         RF_DR_HIGH[3]  = 0
-        RF_PWR[2:1]    = 3 (0dBm (MAX))
+        RF_PWR[2:1]    = 3 (0dBm=MAX)
     0x07: 0x0E (NRF_STATUS)
         RX_DR[6]       = 0
         TX_DS[5]       = 0
@@ -161,9 +168,8 @@ nRF24L01 registers:
         TX_REUSE[6]    = 0
         TX_FULL[5]     = 0
         TX_EMPTY[4]    = 1
-        TX_REUSE[2]    = 0
-        TX_FULL[1]     = 0
-        TX_EMPTY[0]    = 1
+        RX_FULL[1]     = 0
+        RX_EMPTY[0]    = 1
     0x1C: 0x00 (DYNPD)
         DPL_P5[5]      = 0
         DPL_P4[4]      = 0
