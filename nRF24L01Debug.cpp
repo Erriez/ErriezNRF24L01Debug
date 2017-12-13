@@ -152,7 +152,7 @@ void nRF24L01Debug::printRegister(uint8_t addr, const char *desc,
         }
         break;
       case SETUP_AW:
-        printf_P(PSTR("\tAW[1:0]        = %d"), (regVal & 0x03));
+        printf_P(PSTR("\tAW[1:0]        = %d ("), (regVal & 0x03));
         switch (readRegister(SETUP_AW)) {
           case 1:
             printf_P(PSTR("3 bytes"));
@@ -166,7 +166,7 @@ void nRF24L01Debug::printRegister(uint8_t addr, const char *desc,
           default:
             printf_P(PSTR("Invalid"));
         }
-        printf_P(PSTR("\r\n"));
+        printf_P(PSTR(")\r\n"));
         break;
       case SETUP_RETR:
         printf_P(PSTR("\tARD[7:4]       = %d (%d us)\r\n"), (regVal >> 4),
@@ -185,16 +185,16 @@ void nRF24L01Debug::printRegister(uint8_t addr, const char *desc,
         printf_P(PSTR("\tRF_PWR[2:1]    = %d ("), (regVal & 0x06) >> 1);
         switch ((regVal & 0x06) >> 1) {
           case 0:
-            printf_P(PSTR("-18dBm (MIN)"));
+            printf_P(PSTR("-18dBm=MIN"));
             break;
           case 1:
-            printf_P(PSTR("-12dBm (MID)"));
+            printf_P(PSTR("-12dBm=MID"));
             break;
           case 2:
-            printf_P(PSTR("-16dBm (HIGH)"));
+            printf_P(PSTR("-16dBm=HIGH"));
             break;
           case 3:
-            printf_P(PSTR("0dBm (MAX)"));
+            printf_P(PSTR("0dBm=MAX"));
             break;
         }
         printf_P(PSTR(")\r\n"));
@@ -225,9 +225,8 @@ void nRF24L01Debug::printRegister(uint8_t addr, const char *desc,
         printf_P(PSTR("\tTX_REUSE[6]    = %d\r\n"), (regVal & (1<<6)) ? 1 : 0);
         printf_P(PSTR("\tTX_FULL[5]     = %d\r\n"), (regVal & (1<<5)) ? 1 : 0);
         printf_P(PSTR("\tTX_EMPTY[4]    = %d\r\n"), (regVal & (1<<4)) ? 1 : 0);
-        printf_P(PSTR("\tTX_REUSE[2]    = %d\r\n"), (regVal & (1<<2)) ? 1 : 0);
-        printf_P(PSTR("\tTX_FULL[1]     = %d\r\n"), (regVal & (1<<1)) ? 1 : 0);
-        printf_P(PSTR("\tTX_EMPTY[0]    = %d\r\n"), (regVal & (1<<0)) ? 1 : 0);
+        printf_P(PSTR("\tRX_FULL[1]     = %d\r\n"), (regVal & (1<<1)) ? 1 : 0);
+        printf_P(PSTR("\tRX_EMPTY[0]    = %d\r\n"), (regVal & (1<<0)) ? 1 : 0);
         break;
       case DYNPD:
         for (i = 5; i >= 0; i--) {
