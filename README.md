@@ -45,7 +45,7 @@ transceivers.
 A macro ```USE_BITFIELDS``` is enabled by default to print register bitfields. Disable
 this macro in ```nRF24L01Debug.cpp``` to save flash and RAM.
 
-### Examples
+### Example
 ```c++
 #include <Arduino.h>
   
@@ -87,7 +87,7 @@ void loop()
 ```
 
 ### Serial output
-```c++
+```
 nRF24L01 registers:
     0x00: 0x0E (CONFIG)
     0x01: 0x3F (EN_AA)
