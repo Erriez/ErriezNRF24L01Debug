@@ -1,75 +1,93 @@
 # Arduino nRF24L01 debug library.
 
-This library is an addition to the RF24 library to read and print nRF24L01 
-registers debug purposes. This library is compatbile with the Nordic nRF24L01 
-and nRF24L01+ SPI transceivers.
+This library prints nRF24L01(+) registers to the first serial port which is 
+useful for debug purposes.
+
+This library is compatible with the Nordic nRF24L01 and nRF24L01+ SPI 
+transceivers.
+
+## Installation
+1. Start the Arduino IDE.
+2. Download the latest version from:  
+   https://github.com/Erriez/ArduinoLibraryNRF24L01Debug/archive/master.zip
+3. Click Sketch | Include Library | Add .ZIP Library... and select this ZIP.
+5. Run the example.
+
+## Library dependencies
+* https://github.com/Erriez/ArduinoLibraryPrintf
 
 ## Usage
-1. Add #include <nRF24L01Debug.h> to your application.
-2. Add #include <printf.h> and printf_begin() to setup().
-3. Initialize the nRF24L01 debug library with the CSN pin.
-4. Print all registers with/without register bitfields in your application:
-```
-  printAllRegisters(bool printBitfields);
-```
+1. Add #include ```<nRF24L01Debug.h>``` to your application.
+2. Add #include ```<printf.h>```
+3. Add ```printfBegin()``` call to ```setup()```.
+3. Initialize the nRF24L01 debug library with the ```CSN``` pin.
 
-5. Print a single register:
-```
+**Print a single register:**
+```c++
   printRegister(uint8_t registerAddress, bool printBitfields);
 ```
 
-6. Read a register:
-```
+**Read a register:**
+```c++
   uint8_t readRegister(uint8_t reg);
 ```
 
-7. Read an address register:
-```
+**Read an address register:**
+```c++
   uint8_t readRegister(uint8_t reg, uint8_t* buf, uint8_t len);
+```
+
+**Print all registers with/without register bitfields in your application:**
+```c++
+  printAllRegisters(bool printBitfields);
 ```
 
 A macro ```USE_BITFIELDS``` is enabled by default to print register bitfields. Disable
 this macro in ```nRF24L01Debug.cpp``` to save flash and RAM.
 
-### Example
-```
-// 1. Add include files:
-#include <RF24.h>
-#include <nRF24L01Debug.h> 
-
-// 2. Add printf initialization
+### Examples
+```c++
+#include <Arduino.h>
+  
+// https://github.com/Erriez/ArduinoLibraryNRF24L01Debug
+#include <nRF24L01Debug.h>
+  
+// https://github.com/Erriez/ArduinoLibraryPrintf
 #include <printf.h>
   
-// Initialize RF24 radio library
-RF24 radio(CE_PIN, CSN_PIN);
+// SPI chip-select pin
+#define CSN     8
   
-// 3. Initialize nRF24L01 debug library:
-nRF24L01Debug nRF24Debug(CSN_PIN);
+// Initialize nRF24L01 diagnostics library
+nRF24L01Debug nRF24Debug(CSN);
   
 void setup() 
 {
   // Initialize serial port
   Serial.begin(115200);
+  Serial.println(F("nRF24L01(+) dump registers example"));
   
-  // 2. Call printf initialization
-  printf_begin();
+  // Initialize printf
+  printfBegin();
   
-  // Start RF24 radio
-  radio.begin();
+  // Print all registers without bitfields after RF24 initialization
+  nRF24Debug.printAllRegisters();
   
-  // Initialize the radio
-  // ...
-  
-  // 4. Print all nRF24L01 registers with bitfields after RF24 configuration
+  // Print all nRF24L01 registers with bitfields after RF24 configuration
   nRF24Debug.printAllRegisters(true);
+}
   
-  // 5. Print one single register without bitfields
-  nRF24Debug.printRegister(NRF_STATUS, false);
+void loop() 
+{
+  // Print one single register without bitfields
+  nRF24Debug.printRegister(REG_STATUS, false);
+  
+  delay(5000);
 }
 ```
 
 ### Serial output
-```
+```c++
 nRF24L01 registers:
     0x00: 0x0E (CONFIG)
     0x01: 0x3F (EN_AA)
