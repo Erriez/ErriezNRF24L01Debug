@@ -18,35 +18,6 @@ transceivers.
 * git clone https://github.com/Erriez/ArduinoLibraryNRF24L01Iface
 * git clone https://github.com/Erriez/ArduinoLibraryPrintf
 
-## Usage
-1. Add #include ```<nRF24L01Debug.h>``` to your application.
-2. Add #include ```<printf.h>```
-3. Add ```printfBegin()``` call to ```setup()```.
-3. Initialize the nRF24L01 debug library with SPI clock speed and ```CSN``` pin.
-
-**Print a single register:**
-```c++
-  printRegister(uint8_t registerAddress, bool printBitfields);
-```
-
-**Read a register:**
-```c++
-  uint8_t readRegister(uint8_t reg);
-```
-
-**Read an address register:**
-```c++
-  uint8_t readRegister(uint8_t reg, uint8_t* buf, uint8_t len);
-```
-
-**Print all registers with/without register bitfields in your application:**
-```c++
-  printAllRegisters(bool printBitfields);
-```
-
-A macro ```USE_BITFIELDS``` is enabled by default to print register bitfields. Disable
-this macro in ```nRF24L01Debug.cpp``` to save flash and RAM.
-
 ### Example
 
 Examples | nRF24L01(+) Debug | [DumpRegisters](https://github.com/Erriez/ArduinoLibraryNRF24L01Debug/blob/master/examples/DumpRegisters/DumpRegisters.ino)
@@ -204,3 +175,32 @@ nRF24L01 registers:
         EN_ACK_PAY[1]  = 0
         EN_DYN_ACK[0]  = 0
 ```
+
+## Usage
+1. Add #include ```<nRF24L01Debug.h>``` to your application.
+2. Add #include ```<printf.h>```
+3. Add ```printfBegin()``` call to ```setup()```.
+3. Initialize the nRF24L01 debug library with SPI clock speed and ```CSN``` pin.
+
+**Print a single register:**
+```c++
+  printRegister(uint8_t registerAddress, bool printBitfields);
+```
+
+**Read a register:**
+```c++
+  uint8_t readRegister(uint8_t reg);
+```
+
+**Read an address register:**
+```c++
+  uint8_t readRegister(uint8_t reg, uint8_t* buf, uint8_t len);
+```
+
+**Print all registers with/without register bitfields in your application:**
+```c++
+  printAllRegisters(bool printBitfields);
+```
+
+A macro ```USE_BITFIELDS``` is enabled by default to print register bitfields. Disable
+this macro in ```nRF24L01Debug.cpp``` to save flash and RAM.
