@@ -14,13 +14,15 @@ transceivers.
 5. Run the example.
 
 ## Library dependencies
-* https://github.com/Erriez/ArduinoLibraryPrintf
+* git clone https://github.com/Erriez/ArduinoLibraryNRF24L01Debug
+* git clone https://github.com/Erriez/ArduinoLibraryNRF24L01Iface
+* git clone https://github.com/Erriez/ArduinoLibraryPrintf
 
 ## Usage
 1. Add #include ```<nRF24L01Debug.h>``` to your application.
 2. Add #include ```<printf.h>```
 3. Add ```printfBegin()``` call to ```setup()```.
-3. Initialize the nRF24L01 debug library with the ```CSN``` pin.
+3. Initialize the nRF24L01 debug library with SPI clock speed and ```CSN``` pin.
 
 **Print a single register:**
 ```c++
@@ -46,20 +48,22 @@ A macro ```USE_BITFIELDS``` is enabled by default to print register bitfields. D
 this macro in ```nRF24L01Debug.cpp``` to save flash and RAM.
 
 ### Example
+
+Examples | nRF24L01(+) Debug | [DumpRegisters](https://github.com/Erriez/ArduinoLibraryNRF24L01Debug/blob/master/examples/DumpRegisters/DumpRegisters.ino)
+
 ```c++
 #include <Arduino.h>
-  
-// https://github.com/Erriez/ArduinoLibraryNRF24L01Debug
 #include <nRF24L01Debug.h>
-  
-// https://github.com/Erriez/ArduinoLibraryPrintf
 #include <printf.h>
   
 // SPI chip-select pin
-#define CSN     8
+#define CSN_PIN     8
+  
+// SPI clock
+#define SPI_CLOCK   1000000UL
   
 // Initialize nRF24L01 diagnostics library
-nRF24L01Debug nRF24Debug(CSN);
+nRF24L01Debug nRF24Debug(SPI_CLOCK, CSN_PIN);
   
 void setup() 
 {

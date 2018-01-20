@@ -26,7 +26,8 @@
 
 #include "nRF24L01Debug.h"
 
-// Comment the macro below to disable bitfield prints
+// Comment the macro below to disable bitfield prints. This reduces the code
+// size in flash when this functionality is not used.
 #define USE_BITFIELDS
 
 typedef struct {
@@ -66,18 +67,9 @@ static const nRF24L01Registers regs[NUM_REGISTERS] = {
 // -----------------------------------------------------------------------------
 // Public functions
 // -----------------------------------------------------------------------------
-nRF24L01Debug::nRF24L01Debug(uint16_t csnPin)
+nRF24L01Debug::nRF24L01Debug(uint32_t spiClock, uint8_t csnPin)
+        : nRF24L01Iface(spiClock, csnPin)
 {
-  _csnPin = csnPin;
-  
-  // Configure SPI chip-select pin
-	pinMode(_csnPin, OUTPUT);
-
-	// CSN high to disable SPI chip select
-	digitalWrite(_csnPin, HIGH);
-
-	// Initialize SPI
-	SPI.begin();
 }
 
 void nRF24L01Debug::printRegister(uint8_t addr, bool printBitfields)
@@ -115,32 +107,6 @@ void nRF24L01Debug::printAllRegisters(bool printBitfields)
   for (idx = 0; idx < NUM_REGISTERS; idx++) {
     printRegister(regs[idx].address, printBitfields);
   }
-}
-
-uint8_t nRF24L01Debug::readRegister(uint8_t reg, uint8_t* buf, uint8_t len)
-{
-  uint8_t status;
-
-  beginTransaction();
-  status = SPI.transfer(CMD_R_REGISTER | (REGISTER_MASK & reg));
-  while (len-- ) {
-    *buf++ = SPI.transfer(0xff);
-  }
-  endTransaction();
-
-  return status;
-}
-
-uint8_t nRF24L01Debug::readRegister(uint8_t reg)
-{
-  uint8_t result;
-  
-  beginTransaction();
-  SPI.transfer(CMD_R_REGISTER | (REGISTER_MASK & reg));
-  result = SPI.transfer(0xff);
-  endTransaction();
-
-  return result;
 }
 
 // -----------------------------------------------------------------------------
@@ -302,26 +268,4 @@ void nRF24L01Debug::printAddressRegister(uint8_t addr, const char *desc)
         printf_P(PSTR("%02X "), buffer[i]);
     }
     printf_P(PSTR("(%s)\r\n"), desc);
-}
-
-void nRF24L01Debug::beginTransaction()
-{
-  SPI.beginTransaction(SPISettings(RF24_SPI_SPEED, MSBFIRST, SPI_MODE0));
-
-  digitalWrite(_csnPin, LOW);
-  delayMicroseconds(1);
-}
-
-void nRF24L01Debug::endTransaction() 
-{
-  digitalWrite(_csnPin, HIGH);
-  delayMicroseconds(1);
-
-  SPI.endTransaction();
-}
-
-void nRF24L01Debug::csn(bool mode)
-{
-  digitalWrite(_csnPin, mode);
-  delayMicroseconds(5);
 }

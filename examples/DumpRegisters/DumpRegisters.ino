@@ -25,21 +25,25 @@
 /*
  * This nRF24L01 debug example prints nRF24L01(+) registers which is useful
  * during development.
+ *
+ * Library dependencies:
+ *   git clone https://github.com/Erriez/ArduinoLibraryNRF24L01Debug
+ *   git clone https://github.com/Erriez/ArduinoLibraryNRF24L01Iface
+ *   git clone https://github.com/Erriez/ArduinoLibraryPrintf
  */
 
 #include <Arduino.h>
-
-// https://github.com/Erriez/ArduinoLibraryNRF24L01Debug
 #include <nRF24L01Debug.h>
-
-// https://github.com/Erriez/ArduinoLibraryPrintf
 #include <printf.h>
 
 // SPI chip-select pin
-#define CSN     8
+#define CSN_PIN     8
+
+// SPI clock
+#define SPI_CLOCK   1000000UL
 
 // Initialize nRF24L01 diagnostics library
-nRF24L01Debug nRF24Debug(CSN);
+nRF24L01Debug nRF24Debug(SPI_CLOCK, CSN_PIN);
 
 void setup() 
 {
